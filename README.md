@@ -2,6 +2,7 @@
 
 [![Tests](https://github.com/philiprehberger/rb-assert/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rb-assert/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/philiprehberger-assert.svg)](https://rubygems.org/gems/philiprehberger-assert)
+[![License](https://img.shields.io/github/license/philiprehberger/rb-assert)](LICENSE)
 
 Standalone runtime assertion library with chainable matchers for Ruby.
 
