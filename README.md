@@ -27,7 +27,7 @@ gem install philiprehberger-assert
 ## Usage
 
 ```ruby
-require 'philiprehberger/assert'
+require "philiprehberger/assert"
 ```
 
 ### Basic Assertions
@@ -91,8 +91,8 @@ Philiprehberger::Assert.precondition(user.active?, 'user must be active')
 
 ```bash
 bundle install
-bundle exec rspec      # Run tests
-bundle exec rubocop    # Check code style
+bundle exec rspec
+bundle exec rubocop
 ```
 
 ## License
