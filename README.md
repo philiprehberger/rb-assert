@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/rb-assert/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rb-assert/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/philiprehberger-assert.svg)](https://rubygems.org/gems/philiprehberger-assert)
 [![License](https://img.shields.io/github/license/philiprehberger/rb-assert)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Standalone runtime assertion library with chainable matchers
 
@@ -97,4 +98,4 @@ bundle exec rubocop
 
 ## License
 
-MIT
+[MIT](LICENSE)
