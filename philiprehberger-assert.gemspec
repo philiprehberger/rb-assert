@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'Standalone runtime assertion library with chainable matchers'
   spec.description = 'A lightweight runtime assertion library for Ruby with chainable ' \
-                       'matchers, soft assertions, and Design by Contract preconditions.'
+                     'matchers, soft assertions, and Design by Contract preconditions.'
   spec.homepage = 'https://philiprehberger.com/open-source-packages/ruby/philiprehberger-assert'
   spec.license = 'MIT'
 
