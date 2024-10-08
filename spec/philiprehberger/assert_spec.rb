@@ -224,6 +224,99 @@ RSpec.describe Philiprehberger::Assert do
     end
   end
 
+  describe '.that with between' do
+    it 'passes when value is within range' do
+      expect { described_class.that(5).between(1, 10) }.not_to raise_error
+    end
+
+    it 'passes at lower boundary' do
+      expect { described_class.that(1).between(1, 10) }.not_to raise_error
+    end
+
+    it 'passes at upper boundary' do
+      expect { described_class.that(10).between(1, 10) }.not_to raise_error
+    end
+
+    it 'raises when below range' do
+      expect { described_class.that(0).between(1, 10) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'raises when above range' do
+      expect { described_class.that(11).between(1, 10) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'supports custom message' do
+      expect { described_class.that(0, 'bad value').between(1, 10) }.to raise_error(Philiprehberger::Assert::AssertionError, 'bad value')
+    end
+  end
+
+  describe '.that with one_of' do
+    it 'passes when value is in the list' do
+      expect { described_class.that(:red).one_of(:red, :green, :blue) }.not_to raise_error
+    end
+
+    it 'raises when value is not in the list' do
+      expect { described_class.that(:yellow).one_of(:red, :green, :blue) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'works with strings' do
+      expect { described_class.that('a').one_of('a', 'b', 'c') }.not_to raise_error
+    end
+
+    it 'supports custom message' do
+      expect do
+  described_class.that(:yellow, 'invalid color').one_of(:red,
+                                                        :green)
+end.to raise_error(Philiprehberger::Assert::AssertionError, 'invalid color')
+    end
+  end
+
+  describe '.that with responds_to' do
+    it 'passes when value responds to method' do
+      expect { described_class.that('hello').responds_to(:upcase) }.not_to raise_error
+    end
+
+    it 'passes for multiple methods' do
+      expect { described_class.that('hello').responds_to(:upcase, :downcase, :length) }.not_to raise_error
+    end
+
+    it 'raises when value does not respond to method' do
+      expect { described_class.that(42).responds_to(:upcase) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'lists all missing methods in error' do
+      expect do
+  described_class.that(42).responds_to(:upcase, :downcase)
+end.to raise_error(Philiprehberger::Assert::AssertionError, /upcase, downcase/)
+    end
+  end
+
+  describe 'new matchers are chainable' do
+    it 'chains between with other matchers' do
+      expect { described_class.that(5).is_a(Integer).between(1, 10) }.not_to raise_error
+    end
+
+    it 'chains one_of with other matchers' do
+      expect { described_class.that(:red).is_a(Symbol).one_of(:red, :green) }.not_to raise_error
+    end
+
+    it 'chains responds_to with other matchers' do
+      expect { described_class.that('hi').is_a(String).responds_to(:length).not_blank }.not_to raise_error
+    end
+  end
+
+  describe 'new matchers in soft mode' do
+    it 'collects failures from new matchers' do
+      expect do
+        described_class.soft do |a|
+          a.call(0).between(1, 10)
+          a.call(:yellow).one_of(:red, :green)
+          a.call(42).responds_to(:upcase)
+        end
+      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e| expect(e.messages.size).to eq(3) }
+    end
+  end
+
   describe 'error classes' do
     it 'AssertionError is a subclass of StandardError' do
       expect(Philiprehberger::Assert::AssertionError).to be < StandardError

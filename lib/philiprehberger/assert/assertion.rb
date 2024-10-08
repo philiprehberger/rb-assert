@@ -46,6 +46,28 @@ module Philiprehberger
         check(@value.respond_to?(:key?) && @value.key?(key), "Expected #{@value.inspect} to include key #{key.inspect}")
       end
 
+      def between(min, max)
+        check(@value.between?(min, max), "Expected #{@value.inspect} to be between #{min} and #{max}")
+      end
+
+      def one_of(*values)
+        check(values.include?(@value), "Expected #{@value.inspect} to be one of #{values.inspect}")
+      end
+
+      def responds_to(*methods)
+        missing = methods.reject { |m| @value.respond_to?(m) }
+        if missing.empty?
+          self
+        else
+          msg = @message || "Expected #{@value.inspect} to respond to #{missing.join(', ')}"
+          raise AssertionError, msg unless @failures
+
+          @failures << msg
+          self
+
+        end
+      end
+
       private
 
       def check(condition, default_message)
