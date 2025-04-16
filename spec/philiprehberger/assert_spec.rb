@@ -291,6 +291,34 @@ end.to raise_error(Philiprehberger::Assert::AssertionError, /upcase, downcase/)
     end
   end
 
+  describe '.that with satisfies' do
+    it 'passes when block returns truthy' do
+      expect { described_class.that(18).satisfies('voting age') { |v| v >= 18 } }.not_to raise_error
+    end
+
+    it 'raises when block returns falsy' do
+      expect { described_class.that(10).satisfies('voting age') { |v| v >= 18 } }.to raise_error(
+        Philiprehberger::Assert::AssertionError, /satisfy voting age/
+      )
+    end
+
+    it 'uses default description when none given' do
+      expect { described_class.that(10).satisfies { |v| v >= 18 } }.to raise_error(
+        Philiprehberger::Assert::AssertionError, /satisfy custom condition/
+      )
+    end
+
+    it 'supports custom message override' do
+      expect { described_class.that(10, 'too young').satisfies('voting age') { |v| v >= 18 } }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'too young'
+      )
+    end
+
+    it 'is chainable with other matchers' do
+      expect { described_class.that(25).is_a(Integer).satisfies('adult') { |v| v >= 18 }.gte(0) }.not_to raise_error
+    end
+  end
+
   describe 'new matchers are chainable' do
     it 'chains between with other matchers' do
       expect { described_class.that(5).is_a(Integer).between(1, 10) }.not_to raise_error
@@ -303,6 +331,10 @@ end.to raise_error(Philiprehberger::Assert::AssertionError, /upcase, downcase/)
     it 'chains responds_to with other matchers' do
       expect { described_class.that('hi').is_a(String).responds_to(:length).not_blank }.not_to raise_error
     end
+
+    it 'chains satisfies with other matchers' do
+      expect { described_class.that(5).is_a(Integer).satisfies('positive') { |v| v > 0 }.lte(10) }.not_to raise_error
+    end
   end
 
   describe 'new matchers in soft mode' do
@@ -312,8 +344,9 @@ end.to raise_error(Philiprehberger::Assert::AssertionError, /upcase, downcase/)
           a.call(0).between(1, 10)
           a.call(:yellow).one_of(:red, :green)
           a.call(42).responds_to(:upcase)
+          a.call(0).satisfies('positive') { |v| v > 0 }
         end
-      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e| expect(e.messages.size).to eq(3) }
+      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e| expect(e.messages.size).to eq(4) }
     end
   end
 

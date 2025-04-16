@@ -53,6 +53,13 @@ Assert.that(status).one_of(:active, :inactive, :pending)
 Assert.that(handler).responds_to(:call, :arity)
 ```
 
+### Custom Block Assertions
+
+```ruby
+Assert.that(age).satisfies('must be voting age') { |v| v >= 18 }
+Assert.that(email).satisfies { |v| v.include?('@') && v.include?('.') }
+```
+
 ### Custom Messages
 
 ```ruby
@@ -97,6 +104,7 @@ Philiprehberger::Assert.precondition(user.active?, 'user must be active')
 | `.between(min, max)` | Assert value is between min and max (inclusive) |
 | `.one_of(*values)` | Assert value is included in the list |
 | `.responds_to(*methods)` | Assert value responds to all listed methods |
+| `.satisfies(description = nil, &block)` | Assert block returns truthy for value |
 
 ## Development
 

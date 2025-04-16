@@ -68,6 +68,10 @@ module Philiprehberger
         end
       end
 
+      def satisfies(description = nil, &block)
+        check(block.call(@value), "Expected #{@value.inspect} to satisfy #{description || 'custom condition'}")
+      end
+
       private
 
       def check(condition, default_message)
