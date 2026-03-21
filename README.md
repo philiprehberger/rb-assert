@@ -15,13 +15,7 @@ Standalone runtime assertion library with chainable matchers for Ruby.
 Add to your Gemfile:
 
 ```ruby
-gem 'philiprehberger-assert'
-```
-
-Then run:
-
-```bash
-bundle install
+gem "philiprehberger-assert"
 ```
 
 Or install directly:
