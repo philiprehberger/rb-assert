@@ -103,5 +103,143 @@ RSpec.describe Philiprehberger::Assert do
         Philiprehberger::Assert::AssertionError, 'must be true'
       )
     end
+
+    it 'passes for a truthy non-boolean value' do
+      expect { described_class.precondition(1, 'must be truthy') }.not_to raise_error
+    end
+
+    it 'fails for nil condition' do
+      expect { described_class.precondition(nil, 'must not be nil') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'must not be nil'
+      )
+    end
+  end
+
+  describe '.that with not_blank' do
+    it 'fails for nil' do
+      expect { described_class.that(nil).not_blank }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'fails for empty string' do
+      expect { described_class.that('').not_blank }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'passes for a string with content' do
+      expect { described_class.that('x').not_blank }.not_to raise_error
+    end
+  end
+
+  describe '.that with not_empty' do
+    it 'fails for empty hash' do
+      expect { described_class.that({}).not_empty }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'passes for non-empty hash' do
+      expect { described_class.that({ a: 1 }).not_empty }.not_to raise_error
+    end
+
+    it 'fails for empty string' do
+      expect { described_class.that('').not_empty }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+  end
+
+  describe '.that with matches' do
+    it 'matches a numeric pattern' do
+      expect { described_class.that('abc123').matches(/\d+/) }.not_to raise_error
+    end
+
+    it 'fails when pattern does not match' do
+      expect { described_class.that('abc').matches(/\d+/) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'converts non-string values via to_s' do
+      expect { described_class.that(42).matches(/^\d+$/) }.not_to raise_error
+    end
+  end
+
+  describe '.that with gte and lte boundary' do
+    it 'passes gte at exact boundary' do
+      expect { described_class.that(5).gte(5) }.not_to raise_error
+    end
+
+    it 'passes lte at exact boundary' do
+      expect { described_class.that(5).lte(5) }.not_to raise_error
+    end
+  end
+
+  describe '.that with gt and lt boundary' do
+    it 'fails gt at exact boundary' do
+      expect { described_class.that(5).gt(5) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+
+    it 'fails lt at exact boundary' do
+      expect { described_class.that(5).lt(5) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+  end
+
+  describe 'chaining multiple assertions' do
+    it 'chains three assertions successfully' do
+      expect { described_class.that(5).gte(1).lte(10).is_a(Integer) }.not_to raise_error
+    end
+
+    it 'fails on the second assertion in a chain' do
+      expect { described_class.that(5).gte(1).lte(3) }.to raise_error(Philiprehberger::Assert::AssertionError)
+    end
+  end
+
+  describe '.soft collecting multiple failures' do
+    it 'reports correct number of failures' do
+      expect do
+        described_class.soft do |a|
+          a.call(42).is_a(String)
+          a.call(42).is_a(Integer)
+          a.call('').not_blank
+          a.call([]).not_empty
+        end
+      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e|
+        expect(e.messages.length).to eq(3)
+      }
+    end
+
+    it 'includes descriptive messages' do
+      expect do
+        described_class.soft do |a|
+          a.call(42).is_a(String)
+        end
+      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e|
+        expect(e.message).to include('Expected 42 to be a String')
+      }
+    end
+  end
+
+  describe '.that with custom message' do
+    it 'uses custom message on failure' do
+      expect { described_class.that(42, 'must be string').is_a(String) }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'must be string'
+      )
+    end
+
+    it 'does not affect passing assertions' do
+      expect { described_class.that(42, 'custom').is_a(Integer) }.not_to raise_error
+    end
+  end
+
+  describe 'error classes' do
+    it 'AssertionError is a subclass of StandardError' do
+      expect(Philiprehberger::Assert::AssertionError).to be < StandardError
+    end
+
+    it 'MultipleFailures is a subclass of StandardError' do
+      expect(Philiprehberger::Assert::MultipleFailures).to be < StandardError
+    end
+
+    it 'MultipleFailures exposes messages array' do
+      described_class.soft do |a|
+        a.call(nil).not_blank
+      end
+    rescue Philiprehberger::Assert::MultipleFailures => e
+      expect(e.messages).to be_an(Array)
+      expect(e.messages.length).to eq(1)
+    end
   end
 end

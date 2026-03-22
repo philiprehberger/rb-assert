@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-03-22
+
+### Added
+- Expanded test suite from 20 to 30+ examples covering all matcher types, chainable assertions, soft mode, custom messages, error classes, and boundary conditions
+
 ## [0.1.5] - 2026-03-21
 
 ### Fixed
