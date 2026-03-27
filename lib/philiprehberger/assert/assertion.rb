@@ -10,7 +10,7 @@ module Philiprehberger
         @failures = failures
       end
 
-      def is_a(type) # rubocop:disable Naming/PredicatePrefix
+      def is_a(type)
         check(@value.is_a?(type), "Expected #{@value.inspect} to be a #{type}")
       end
 
