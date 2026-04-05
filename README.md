@@ -45,6 +45,14 @@ Philiprehberger::Assert.that(config).includes_key(:host)
 Philiprehberger::Assert.that(items).not_empty
 ```
 
+### Range and Membership
+
+```ruby
+Assert.that(age).between(0, 150)
+Assert.that(status).one_of(:active, :inactive, :pending)
+Assert.that(handler).responds_to(:call, :arity)
+```
+
 ### Custom Messages
 
 ```ruby
@@ -86,6 +94,9 @@ Philiprehberger::Assert.precondition(user.active?, 'user must be active')
 | `Assertion#not_blank` | Assert value is not nil or blank |
 | `Assertion#not_empty` | Assert value is not empty |
 | `Assertion#includes_key(key)` | Assert hash includes key |
+| `.between(min, max)` | Assert value is between min and max (inclusive) |
+| `.one_of(*values)` | Assert value is included in the list |
+| `.responds_to(*methods)` | Assert value responds to all listed methods |
 
 ## Development
 

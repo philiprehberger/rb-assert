@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-04-04
+
+### Added
+- `between(min, max)` matcher for range assertions
+- `one_of(*values)` matcher for membership assertions
+- `responds_to(*methods)` matcher for interface assertions
+- GitHub issue template gem version field
+- Feature request "Alternatives considered" field
+
 ## [0.1.11] - 2026-03-31
 
 ### Added
