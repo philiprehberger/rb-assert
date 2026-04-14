@@ -45,6 +45,13 @@ Philiprehberger::Assert.that(config).includes_key(:host)
 Philiprehberger::Assert.that(items).not_empty
 ```
 
+### String Prefix and Suffix
+
+```ruby
+Assert.that('hello world').starts_with('hello')
+Assert.that('hello world').ends_with('world')
+```
+
 ### Range and Membership
 
 ```ruby
@@ -98,6 +105,8 @@ Philiprehberger::Assert.precondition(user.active?, 'user must be active')
 | `Assertion#gt(num)` | Assert value > num |
 | `Assertion#lt(num)` | Assert value < num |
 | `Assertion#matches(pattern)` | Assert value matches regex pattern |
+| `Assertion#starts_with(prefix)` | Assert string value starts with prefix |
+| `Assertion#ends_with(suffix)` | Assert string value ends with suffix |
 | `Assertion#not_blank` | Assert value is not nil or blank |
 | `Assertion#not_empty` | Assert value is not empty |
 | `Assertion#includes_key(key)` | Assert hash includes key |
