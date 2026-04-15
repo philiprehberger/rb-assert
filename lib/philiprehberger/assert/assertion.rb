@@ -34,6 +34,14 @@ module Philiprehberger
         check(pattern.match?(@value.to_s), "Expected #{@value.inspect} to match #{pattern.inspect}")
       end
 
+      def starts_with(prefix)
+        check(@value.start_with?(prefix), "expected to start with #{prefix.inspect}")
+      end
+
+      def ends_with(suffix)
+        check(@value.end_with?(suffix), "expected to end with #{suffix.inspect}")
+      end
+
       def not_blank
         check(!@value.nil? && !@value.to_s.strip.empty?, 'Expected value to not be blank')
       end

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-04-15
+
+### Added
+- `starts_with(prefix)` matcher for string prefix assertions
+- `ends_with(suffix)` matcher for string suffix assertions
+
 ## [0.3.0] - 2026-04-04
 
 ### Added

@@ -157,6 +157,62 @@ RSpec.describe Philiprehberger::Assert do
     end
   end
 
+  describe '.that with starts_with' do
+    it 'passes when string starts with prefix' do
+      expect { described_class.that('hello world').starts_with('hello') }.not_to raise_error
+    end
+
+    it 'raises when string does not start with prefix' do
+      expect { described_class.that('hello world').starts_with('world') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'expected to start with "world"'
+      )
+    end
+
+    it 'supports custom message' do
+      expect { described_class.that('hello', 'bad prefix').starts_with('world') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'bad prefix'
+      )
+    end
+
+    it 'collects failure in soft mode' do
+      expect do
+        described_class.soft do |a|
+          a.call('hello').starts_with('world')
+        end
+      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e|
+        expect(e.messages.length).to eq(1)
+      }
+    end
+  end
+
+  describe '.that with ends_with' do
+    it 'passes when string ends with suffix' do
+      expect { described_class.that('hello world').ends_with('world') }.not_to raise_error
+    end
+
+    it 'raises when string does not end with suffix' do
+      expect { described_class.that('hello world').ends_with('hello') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'expected to end with "hello"'
+      )
+    end
+
+    it 'supports custom message' do
+      expect { described_class.that('hello', 'bad suffix').ends_with('world') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'bad suffix'
+      )
+    end
+
+    it 'collects failure in soft mode' do
+      expect do
+        described_class.soft do |a|
+          a.call('hello').ends_with('world')
+        end
+      end.to raise_error(Philiprehberger::Assert::MultipleFailures) { |e|
+        expect(e.messages.length).to eq(1)
+      }
+    end
+  end
+
   describe '.that with gte and lte boundary' do
     it 'passes gte at exact boundary' do
       expect { described_class.that(5).gte(5) }.not_to raise_error
