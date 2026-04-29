@@ -115,6 +115,28 @@ RSpec.describe Philiprehberger::Assert do
     end
   end
 
+  describe '.postcondition' do
+    it 'passes for a truthy condition' do
+      expect { described_class.postcondition(true, 'result must be set') }.not_to raise_error
+    end
+
+    it 'fails for a falsey condition' do
+      expect { described_class.postcondition(false, 'result must be set') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'result must be set'
+      )
+    end
+
+    it 'passes for a truthy non-boolean value' do
+      expect { described_class.postcondition('ok', 'result must be set') }.not_to raise_error
+    end
+
+    it 'fails for nil condition' do
+      expect { described_class.postcondition(nil, 'result must not be nil') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'result must not be nil'
+      )
+    end
+  end
+
   describe '.that with not_blank' do
     it 'fails for nil' do
       expect { described_class.that(nil).not_blank }.to raise_error(Philiprehberger::Assert::AssertionError)

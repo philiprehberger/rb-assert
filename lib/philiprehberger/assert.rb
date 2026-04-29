@@ -33,5 +33,14 @@ module Philiprehberger
     def self.precondition(condition, message)
       raise AssertionError, message unless condition
     end
+
+    # Design by Contract postcondition check.
+    #
+    # @param condition [Boolean] the condition to verify
+    # @param message [String] failure message
+    # @raise [AssertionError] if condition is false
+    def self.postcondition(condition, message)
+      raise AssertionError, message unless condition
+    end
   end
 end

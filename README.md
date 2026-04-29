@@ -92,13 +92,25 @@ end
 Philiprehberger::Assert.precondition(user.active?, 'user must be active')
 ```
 
+### Postconditions (Design by Contract)
+
+```ruby
+def withdraw(amount)
+  Philiprehberger::Assert.precondition(amount.positive?, 'amount must be positive')
+  result = perform_withdrawal(amount)
+  Philiprehberger::Assert.postcondition(result.balance >= 0, 'balance must not go negative')
+  result
+end
+```
+
 ## API
 
 | Method | Description |
 |--------|-------------|
 | `Assert.that(value, message = nil)` | Start a chainable assertion |
 | `Assert.soft { \|a\| ... }` | Collect failures, raise at end |
-| `Assert.precondition(condition, message)` | Design by Contract check |
+| `Assert.precondition(condition, message)` | Design by Contract precondition check |
+| `Assert.postcondition(condition, message)` | Design by Contract postcondition check |
 | `Assertion#is_a(type)` | Assert value is an instance of type |
 | `Assertion#gte(num)` | Assert value >= num |
 | `Assertion#lte(num)` | Assert value <= num |
