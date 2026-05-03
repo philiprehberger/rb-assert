@@ -103,6 +103,16 @@ def withdraw(amount)
 end
 ```
 
+### Invariant (Design by Contract)
+
+```ruby
+def transfer(from, to, amount)
+  before = from.balance + to.balance
+  perform_transfer(from, to, amount)
+  Philiprehberger::Assert.invariant(from.balance + to.balance == before, 'total balance must be conserved')
+end
+```
+
 ## API
 
 | Method | Description |
@@ -111,6 +121,7 @@ end
 | `Assert.soft { \|a\| ... }` | Collect failures, raise at end |
 | `Assert.precondition(condition, message)` | Design by Contract precondition check |
 | `Assert.postcondition(condition, message)` | Design by Contract postcondition check |
+| `Assert.invariant(condition, message)` | Design by Contract class-invariant check |
 | `Assertion#is_a(type)` | Assert value is an instance of type |
 | `Assertion#gte(num)` | Assert value >= num |
 | `Assertion#lte(num)` | Assert value <= num |

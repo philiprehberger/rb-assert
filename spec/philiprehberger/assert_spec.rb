@@ -137,6 +137,32 @@ RSpec.describe Philiprehberger::Assert do
     end
   end
 
+  describe '.invariant' do
+    it 'passes for a truthy condition' do
+      expect { described_class.invariant(true, 'state must hold') }.not_to raise_error
+    end
+
+    it 'fails for a falsey condition' do
+      expect { described_class.invariant(false, 'state must hold') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'state must hold'
+      )
+    end
+
+    it 'passes for a truthy non-boolean value' do
+      expect { described_class.invariant('ok', 'state must hold') }.not_to raise_error
+    end
+
+    it 'fails for nil condition' do
+      expect { described_class.invariant(nil, 'state must not be nil') }.to raise_error(
+        Philiprehberger::Assert::AssertionError, 'state must not be nil'
+      )
+    end
+
+    it 'returns nil when condition holds' do
+      expect(described_class.invariant(true, 'ok')).to be_nil
+    end
+  end
+
   describe '.that with not_blank' do
     it 'fails for nil' do
       expect { described_class.that(nil).not_blank }.to raise_error(Philiprehberger::Assert::AssertionError)
